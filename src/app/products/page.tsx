@@ -2,7 +2,7 @@ import Product from "@/components/product";
 import { ProductType } from "@/interfaces";
 
 const ProductsPage = async () => {
-  const res = await fetch("https://fakestoreapi.com/products");
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/products`);
   const products: ProductType[] = await res.json();
   return (
     <main className="min-h-screen max-w-7xl mx-auto my-10 px-8 xl:px-0">
