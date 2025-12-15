@@ -1,9 +1,40 @@
+"use client";
+
 import Product from "@/components/product";
 import { ProductType } from "@/interfaces";
+import { useEffect, useState } from "react";
 
-const ProductsPage = async () => {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/products`);
-  const products: ProductType[] = await res.json();
+const ProductsPage = () => {
+  const [products, setProducts] = useState<ProductType[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetch(`${process.env.NEXT_PUBLIC_API_URL}/products`)
+      .then((res) => {
+        if (!res.ok) {
+          throw new Error("Failed to fetch products");
+        }
+        return res.json();
+      })
+      .then((data: ProductType[]) => {
+        setProducts(data);
+      })
+      .catch((err) => {
+        console.error(err);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  }, []);
+
+  if (loading) {
+    return (
+      <main className="min-h-screen flex items-center justify-center">
+        <p className="text-lg">Loading...</p>
+      </main>
+    );
+  }
+
   return (
     <main className="min-h-screen max-w-7xl mx-auto my-10 px-8 xl:px-0">
       <section className="flex flex-col space-y-12">
